@@ -1,5 +1,9 @@
+import { useState } from "react";
 import { Star, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/context/CartContext";
+import { Burger } from "@/types/burger";
+import { toast } from "sonner";
 import burger1 from "@/assets/burger-1.jpg";
 import burger2 from "@/assets/burger-2.jpg";
 import burger3 from "@/assets/burger-3.jpg";
@@ -7,7 +11,7 @@ import burger4 from "@/assets/burger-4.jpg";
 import burger5 from "@/assets/burger-5.jpg";
 import burger6 from "@/assets/burger-6.jpg";
 
-const burgers = [
+const burgers: Burger[] = [
   {
     id: 1,
     name: "Classic Cheese Burger",
@@ -67,6 +71,18 @@ const burgers = [
 const categories = ["All", "Beef", "Premium", "Spicy", "Gourmet", "BBQ"];
 
 const MenuSection = () => {
+  const [activeCategory, setActiveCategory] = useState("All");
+  const { addToCart } = useCart();
+
+  const filteredBurgers = activeCategory === "All" 
+    ? burgers 
+    : burgers.filter(burger => burger.category === activeCategory);
+
+  const handleAddToCart = (burger: Burger) => {
+    addToCart(burger);
+    toast.success(`${burger.name} added to cart!`);
+  };
+
   return (
     <section id="menu" className="py-20 relative">
       {/* Background Effects */}
@@ -87,11 +103,12 @@ const MenuSection = () => {
 
         {/* Categories */}
         <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {categories.map((category, index) => (
+          {categories.map((category) => (
             <button
               key={category}
+              onClick={() => setActiveCategory(category)}
               className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
-                index === 0
+                activeCategory === category
                   ? "bg-primary text-primary-foreground"
                   : "bg-card border border-border text-muted-foreground hover:border-primary hover:text-primary"
               }`}
@@ -103,7 +120,7 @@ const MenuSection = () => {
 
         {/* Menu Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {burgers.map((burger, index) => (
+          {filteredBurgers.map((burger, index) => (
             <div
               key={burger.id}
               className="group glass-card overflow-hidden hover:border-primary/30 transition-all duration-300"
@@ -145,6 +162,7 @@ const MenuSection = () => {
                   </span>
                   <Button
                     size="sm"
+                    onClick={() => handleAddToCart(burger)}
                     className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
                   >
                     <ShoppingCart className="w-4 h-4" />
