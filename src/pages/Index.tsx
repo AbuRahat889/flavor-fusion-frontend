@@ -4,6 +4,7 @@ import MenuSection from "@/components/MenuSection";
 import WhyChooseSection from "@/components/WhyChooseSection";
 import ChefSection from "@/components/ChefSection";
 import Footer from "@/components/Footer";
+import CartDrawer from "@/components/CartDrawer";
 
 const Index = () => {
   return (
@@ -14,6 +15,7 @@ const Index = () => {
       <WhyChooseSection />
       <ChefSection />
       <Footer />
+      <CartDrawer />
     </div>
   );
 };
