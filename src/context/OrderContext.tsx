@@ -19,18 +19,43 @@ const initial: Order[] = [
   { id: "ORD-1007", customer: "Noah Miller", items: [{ name: "Classic Cheese Burger", quantity: 4, price: 10.99 }], total: 43.96, status: "delivered", createdAt: daysAgo(40) },
 ];
 
+interface NewOrderInput {
+  customer: string;
+  items: { name: string; quantity: number; price: number }[];
+  total: number;
+}
+
 interface OrderContextType {
   orders: Order[];
   updateStatus: (id: string, status: OrderStatus) => void;
+  addOrder: (input: NewOrderInput) => Order;
 }
 
 const OrderContext = createContext<OrderContextType | undefined>(undefined);
 
 export const OrderProvider = ({ children }: { children: ReactNode }) => {
   const [orders, setOrders] = useState<Order[]>(initial);
+
   const updateStatus = (id: string, status: OrderStatus) =>
     setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
-  return <OrderContext.Provider value={{ orders, updateStatus }}>{children}</OrderContext.Provider>;
+
+  const addOrder = (input: NewOrderInput): Order => {
+    const nextNum = 1000 + orders.length + 1;
+    const order: Order = {
+      id: `ORD-${nextNum}`,
+      customer: input.customer,
+      items: input.items,
+      total: input.total,
+      status: "pending",
+      createdAt: new Date().toISOString(),
+    };
+    setOrders((prev) => [order, ...prev]);
+    return order;
+  };
+
+  return (
+    <OrderContext.Provider value={{ orders, updateStatus, addOrder }}>{children}</OrderContext.Provider>
+  );
 };
 
 export const useOrders = () => {
