@@ -1,11 +1,13 @@
+import { useState } from "react";
 import { Minus, Plus, X, ShoppingBag, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/context/CartContext";
-import { toast } from "sonner";
+import CheckoutDialog from "@/components/CheckoutDialog";
 
 const CartDrawer = () => {
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   const {
     items,
     removeFromCart,
@@ -18,11 +20,12 @@ const CartDrawer = () => {
   } = useCart();
 
   const handleCheckout = () => {
-    // TODO: Integrate with Stripe payment
-    toast.info("Payment integration coming soon! Enable Lovable Cloud to proceed.");
+    setIsCartOpen(false);
+    setCheckoutOpen(true);
   };
 
   return (
+    <>
     <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
       <SheetContent className="w-full sm:max-w-lg bg-card border-border flex flex-col">
         <SheetHeader>
