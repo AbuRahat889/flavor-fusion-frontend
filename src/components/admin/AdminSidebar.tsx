@@ -1,5 +1,6 @@
-import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, UtensilsCrossed, ShoppingBag, Tag, Home } from "lucide-react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { LayoutDashboard, UtensilsCrossed, ShoppingBag, Tag, Home, LogOut } from "lucide-react";
+import { useAdminAuth } from "@/context/AdminAuthContext";
 import {
   Sidebar,
   SidebarContent,
