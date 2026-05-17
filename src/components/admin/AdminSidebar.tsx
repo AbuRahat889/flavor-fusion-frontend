@@ -1,5 +1,6 @@
-import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, UtensilsCrossed, ShoppingBag, Tag, Home } from "lucide-react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { LayoutDashboard, UtensilsCrossed, ShoppingBag, Tag, Home, LogOut } from "lucide-react";
+import { useAdminAuth } from "@/context/AdminAuthContext";
 import {
   Sidebar,
   SidebarContent,
@@ -23,6 +24,13 @@ export function AdminSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const { pathname } = useLocation();
+  const { logout } = useAdminAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/admin/login", { replace: true });
+  };
 
   return (
     <Sidebar collapsible="icon">
@@ -73,6 +81,12 @@ export function AdminSidebar() {
                     <Home className="h-4 w-4" />
                     {!collapsed && <span>Back to Site</span>}
                   </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton onClick={handleLogout} className="flex items-center gap-2 text-destructive">
+                  <LogOut className="h-4 w-4" />
+                  {!collapsed && <span>Logout</span>}
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
