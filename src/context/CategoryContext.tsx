@@ -18,18 +18,25 @@ interface CategoryContextType {
   deleteCategory: (id: number) => void;
 }
 
-const CategoryContext = createContext<CategoryContextType | undefined>(undefined);
+const CategoryContext = createContext<CategoryContextType | undefined>(
+  undefined,
+);
 
 export const CategoryProvider = ({ children }: { children: ReactNode }) => {
   const [categories, setCategories] = useState<Category[]>(initial);
   const addCategory = (c: Omit<Category, "id">) =>
-    setCategories((prev) => [...prev, { ...c, id: Math.max(0, ...prev.map((x) => x.id)) + 1 }]);
+    setCategories((prev) => [
+      ...prev,
+      { ...c, id: Math.max(0, ...prev.map((x) => x.id)) + 1 },
+    ]);
   const updateCategory = (id: number, c: Omit<Category, "id">) =>
     setCategories((prev) => prev.map((x) => (x.id === id ? { ...c, id } : x)));
   const deleteCategory = (id: number) =>
     setCategories((prev) => prev.filter((x) => x.id !== id));
   return (
-    <CategoryContext.Provider value={{ categories, addCategory, updateCategory, deleteCategory }}>
+    <CategoryContext.Provider
+      value={{ categories, addCategory, updateCategory, deleteCategory }}
+    >
       {children}
     </CategoryContext.Provider>
   );
@@ -37,6 +44,7 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
 
 export const useCategories = () => {
   const ctx = useContext(CategoryContext);
-  if (!ctx) throw new Error("useCategories must be used within CategoryProvider");
+  if (!ctx)
+    throw new Error("useCategories must be used within CategoryProvider");
   return ctx;
 };
