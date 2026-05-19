@@ -32,9 +32,15 @@ cd <YOUR_PROJECT_NAME>
 # Step 3: Install the necessary dependencies.
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the Next.js development server.
 npm run dev
 ```
+
+## Tech stack
+
+- **Next.js 15** (App Router) with **TypeScript**
+- **Tailwind CSS** + **shadcn/ui**
+- React Context for cart, menu, orders, and admin state
 
 **Edit a file directly in GitHub**
 

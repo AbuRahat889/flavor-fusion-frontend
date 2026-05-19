@@ -1,5 +1,8 @@
+"use client";
+
 import { Search, Facebook, Instagram, Twitter, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getImageSrc } from "@/lib/image";
 import heroBurger from "@/assets/hero-burger.png";
 
 const HeroSection = () => {
@@ -91,7 +94,7 @@ const HeroSection = () => {
             {/* Main Image */}
             <div className="relative z-10 animate-float">
               <img
-                src={heroBurger}
+                src={getImageSrc(heroBurger)}
                 alt="Delicious gourmet burger"
                 className="w-full max-w-lg lg:max-w-xl drop-shadow-2xl"
               />

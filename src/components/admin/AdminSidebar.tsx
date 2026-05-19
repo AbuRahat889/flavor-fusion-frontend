@@ -1,4 +1,7 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { LayoutDashboard, UtensilsCrossed, ShoppingBag, Tag, Home, LogOut } from "lucide-react";
 import { useAdminAuth } from "@/context/AdminAuthContext";
 import {
@@ -23,13 +26,13 @@ const items = [
 export function AdminSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
-  const { pathname } = useLocation();
+  const pathname = usePathname();
   const { logout } = useAdminAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleLogout = () => {
     logout();
-    navigate("/admin/login", { replace: true });
+    router.replace("/admin/login");
   };
 
   return (
@@ -59,10 +62,10 @@ export function AdminSidebar() {
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={active}>
-                      <NavLink to={item.url} end={item.end} className="flex items-center gap-2">
+                      <Link href={item.url} className="flex items-center gap-2">
                         <item.icon className="h-4 w-4" />
                         {!collapsed && <span>{item.title}</span>}
-                      </NavLink>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
@@ -77,10 +80,10 @@ export function AdminSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/" className="flex items-center gap-2">
+                  <Link href="/" className="flex items-center gap-2">
                     <Home className="h-4 w-4" />
                     {!collapsed && <span>Back to Site</span>}
-                  </NavLink>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>

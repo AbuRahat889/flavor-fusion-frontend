@@ -1,5 +1,8 @@
+"use client";
+
 import { createContext, useContext, useState, ReactNode } from "react";
 import { Burger } from "@/types/burger";
+import { getImageSrc } from "@/lib/image";
 import burger1 from "@/assets/burger-1.jpg";
 import burger2 from "@/assets/burger-2.jpg";
 import burger3 from "@/assets/burger-3.jpg";
@@ -8,12 +11,12 @@ import burger5 from "@/assets/burger-5.jpg";
 import burger6 from "@/assets/burger-6.jpg";
 
 const initialBurgers: Burger[] = [
-  { id: 1, name: "Classic Cheese Burger", description: "Juicy beef patty with melted cheddar cheese", price: 10.99, rating: 4.9, image: burger1, category: "Beef" },
-  { id: 2, name: "Bacon Deluxe", description: "Crispy bacon with onion rings and special sauce", price: 13.99, rating: 4.8, image: burger2, category: "Premium" },
-  { id: 3, name: "Spicy Jalapeño", description: "Hot jalapeños with pepper jack cheese", price: 11.99, rating: 4.7, image: burger3, category: "Spicy" },
-  { id: 4, name: "Mushroom Swiss", description: "Sautéed mushrooms with swiss cheese", price: 12.49, rating: 4.9, image: burger4, category: "Gourmet" },
-  { id: 5, name: "BBQ Stack", description: "BBQ sauce with cheddar and onion rings", price: 14.99, rating: 4.8, image: burger5, category: "BBQ" },
-  { id: 6, name: "Double Stack", description: "Double patty with double cheese and pickles", price: 15.99, rating: 5.0, image: burger6, category: "Premium" },
+  { id: 1, name: "Classic Cheese Burger", description: "Juicy beef patty with melted cheddar cheese", price: 10.99, rating: 4.9, image: getImageSrc(burger1), category: "Beef" },
+  { id: 2, name: "Bacon Deluxe", description: "Crispy bacon with onion rings and special sauce", price: 13.99, rating: 4.8, image: getImageSrc(burger2), category: "Premium" },
+  { id: 3, name: "Spicy Jalapeño", description: "Hot jalapeños with pepper jack cheese", price: 11.99, rating: 4.7, image: getImageSrc(burger3), category: "Spicy" },
+  { id: 4, name: "Mushroom Swiss", description: "Sautéed mushrooms with swiss cheese", price: 12.49, rating: 4.9, image: getImageSrc(burger4), category: "Gourmet" },
+  { id: 5, name: "BBQ Stack", description: "BBQ sauce with cheddar and onion rings", price: 14.99, rating: 4.8, image: getImageSrc(burger5), category: "BBQ" },
+  { id: 6, name: "Double Stack", description: "Double patty with double cheese and pickles", price: 15.99, rating: 5.0, image: getImageSrc(burger6), category: "Premium" },
 ];
 
 interface MenuContextType {

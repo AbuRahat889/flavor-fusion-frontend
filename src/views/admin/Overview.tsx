@@ -1,3 +1,5 @@
+"use client";
+
 import { ShoppingBag, Calendar, UtensilsCrossed, Tag, DollarSign, TrendingUp } from "lucide-react";
 import { useOrders } from "@/context/OrderContext";
 import { useMenu } from "@/context/MenuContext";

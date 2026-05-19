@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 // Demo credentials (mock auth only — not for production)
@@ -6,6 +8,7 @@ const STORAGE_KEY = "admin_auth";
 
 interface AdminAuthContextType {
   isAuthenticated: boolean;
+  isReady: boolean;
   login: (username: string, password: string) => boolean;
   logout: () => void;
 }
@@ -14,9 +17,11 @@ const AdminAuthContext = createContext<AdminAuthContextType | undefined>(undefin
 
 export const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     setIsAuthenticated(sessionStorage.getItem(STORAGE_KEY) === "1");
+    setIsReady(true);
   }, []);
 
   const login = (username: string, password: string) => {
@@ -34,7 +39,7 @@ export const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AdminAuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AdminAuthContext.Provider value={{ isAuthenticated, isReady, login, logout }}>
       {children}
     </AdminAuthContext.Provider>
   );

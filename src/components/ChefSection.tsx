@@ -1,5 +1,8 @@
+"use client";
+
 import { Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getImageSrc } from "@/lib/image";
 import chefImage from "@/assets/chef.jpg";
 
 const ChefSection = () => {
@@ -15,7 +18,7 @@ const ChefSection = () => {
           <div className="relative">
             <div className="relative rounded-3xl overflow-hidden">
               <img
-                src={chefImage}
+                src={getImageSrc(chefImage)}
                 alt="Our Master Chef"
                 className="w-full h-[500px] lg:h-[600px] object-cover"
               />

@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Lock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,22 +11,30 @@ import { useAdminAuth, DEMO_ADMIN } from "@/context/AdminAuthContext";
 import { toast } from "sonner";
 
 const AdminLogin = () => {
-  const { isAuthenticated, login } = useAdminAuth();
-  const navigate = useNavigate();
+  const { isAuthenticated, isReady, login } = useAdminAuth();
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  if (isAuthenticated) return <Navigate to="/admin" replace />;
+  useEffect(() => {
+    if (isReady && isAuthenticated) {
+      router.replace("/admin");
+    }
+  }, [isReady, isAuthenticated, router]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (login(username, password)) {
       toast.success("Welcome back, Admin!");
-      navigate("/admin", { replace: true });
+      router.replace("/admin");
     } else {
       toast.error("Invalid credentials");
     }
   };
+
+  if (!isReady || isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">

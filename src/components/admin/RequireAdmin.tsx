@@ -1,12 +1,23 @@
-import { Navigate, useLocation } from "react-router-dom";
+"use client";
+
+import { useRouter } from "next/navigation";
 import { useAdminAuth } from "@/context/AdminAuthContext";
+import { useEffect } from "react";
 
 const RequireAdmin = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAdminAuth();
-  const location = useLocation();
-  if (!isAuthenticated) {
-    return <Navigate to="/admin/login" replace state={{ from: location }} />;
-  }
+  const { isAuthenticated, isReady } = useAdminAuth();
+  const router = useRouter();
+
+  // useEffect(() => {
+  //   if (isReady && !isAuthenticated) {
+  //     router.replace("/admin/login");
+  //   }
+  // }, [isReady, isAuthenticated, router]);
+
+  // if (!isReady || !isAuthenticated) {
+  //   return null;
+  // }
+
   return <>{children}</>;
 };
 
