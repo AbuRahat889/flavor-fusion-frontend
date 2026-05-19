@@ -15,9 +15,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
               Admin <span className="text-primary">Dashboard</span>
             </h1>
           </header>
-          <main className="flex-1 p-4 md:p-8">
-            {children}
-          </main>
+          <main className="flex-1 p-4 md:p-8">{children}</main>
         </div>
       </div>
     </SidebarProvider>

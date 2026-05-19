@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, UtensilsCrossed, ShoppingBag, Tag, Home, LogOut } from "lucide-react";
+import {
+  LayoutDashboard,
+  UtensilsCrossed,
+  ShoppingBag,
+  Tag,
+  Home,
+  LogOut,
+} from "lucide-react";
 import { useAdminAuth } from "@/context/AdminAuthContext";
 import {
   Sidebar,
@@ -15,6 +22,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 
 const items = [
   { title: "Overview", url: "/admin", icon: LayoutDashboard, end: true },
@@ -38,17 +46,19 @@ export function AdminSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
-        <div className="p-4 border-b border-border/50">
+        <div className=" flex items-center border-b border-border/50 pb-2">
           {!collapsed ? (
-            <div>
+            <div className="px-4 py-[2px]">
               <h2 className="font-serif text-lg font-bold text-foreground">
                 Burger<span className="text-primary">Admin</span>
               </h2>
               <p className="text-xs text-muted-foreground">Dashboard</p>
             </div>
           ) : (
-            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-              <UtensilsCrossed className="w-4 h-4 text-primary" />
+            <div className="p-2">
+              <div className=" rounded-full  flex items-center justify-center ">
+                <UtensilsCrossed className="w-8 h-8 text-primary" />
+              </div>
             </div>
           )}
         </div>
@@ -58,11 +68,19 @@ export function AdminSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
-                const active = item.end ? pathname === item.url : pathname.startsWith(item.url);
+                const active = item.end
+                  ? pathname === item.url
+                  : pathname.startsWith(item.url);
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={active}>
-                      <Link href={item.url} className="flex items-center gap-2">
+                      <Link
+                        href={item.url}
+                        className={cn(
+                          "flex items-center gap-2 py-5 hover:bg-[#241510]",
+                          active && "bg-primary",
+                        )}
+                      >
                         <item.icon className="h-4 w-4" />
                         {!collapsed && <span>{item.title}</span>}
                       </Link>
@@ -80,14 +98,20 @@ export function AdminSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/" className="flex items-center gap-2">
+                  <Link
+                    href="/"
+                    className="flex items-center gap-2 hover:bg-[#241510] rounded-md py-5"
+                  >
                     <Home className="h-4 w-4" />
                     {!collapsed && <span>Back to Site</span>}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={handleLogout} className="flex items-center gap-2 text-destructive">
+                <SidebarMenuButton
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 text-destructive"
+                >
                   <LogOut className="h-4 w-4" />
                   {!collapsed && <span>Logout</span>}
                 </SidebarMenuButton>
