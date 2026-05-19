@@ -1,21 +1,48 @@
 "use client";
 
-import { useState } from "react";
-import { Pencil, Trash2, Plus, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useMenu } from "@/context/MenuContext";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
 import { useCategories } from "@/context/CategoryContext";
+import { useMenu } from "@/context/MenuContext";
 import { Burger } from "@/types/burger";
+import { Pencil, Plus, Star, Trash2 } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
 import { toast } from "sonner";
 
 type FormState = Omit<Burger, "id">;
-const empty: FormState = { name: "", description: "", price: 0, rating: 4.5, image: "", category: "Beef" };
+const empty: FormState = {
+  name: "",
+  description: "",
+  price: 0,
+  rating: 4.5,
+  image: "",
+  category: "Beef",
+};
 
 const Products = () => {
   const { burgers, addBurger, updateBurger, deleteBurger } = useMenu();
@@ -31,7 +58,7 @@ const Products = () => {
   };
   const openEdit = (b: Burger) => {
     setEditingId(b.id);
-    const { id, ...rest } = b;
+    const { ...rest } = b;
     setForm(rest);
     setOpen(true);
   };
@@ -63,10 +90,17 @@ const Products = () => {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="font-serif text-3xl font-bold text-foreground">Product Management</h2>
-          <p className="text-sm text-muted-foreground">Add, edit, and remove menu items</p>
+          <h2 className="font-serif text-3xl font-bold text-foreground">
+            Product Management
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Add, edit, and remove menu items
+          </p>
         </div>
-        <Button onClick={openAdd} className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
+        <Button
+          onClick={openAdd}
+          className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
+        >
           <Plus className="w-4 h-4" /> Add Product
         </Button>
       </div>
@@ -79,7 +113,9 @@ const Products = () => {
                 <TableHead>Image</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead className="hidden md:table-cell">Category</TableHead>
-                <TableHead className="hidden lg:table-cell">Description</TableHead>
+                <TableHead className="hidden lg:table-cell">
+                  Description
+                </TableHead>
                 <TableHead>Price</TableHead>
                 <TableHead className="hidden sm:table-cell">Rating</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
@@ -89,14 +125,28 @@ const Products = () => {
               {burgers.map((b) => (
                 <TableRow key={b.id}>
                   <TableCell>
-                    <img src={b.image} alt={b.name} className="w-12 h-12 rounded-lg object-cover" />
+                    <Image
+                      src={b.image}
+                      alt={b.name}
+                      width={480}
+                      height={480}
+                      className="w-12 h-12 rounded-lg object-cover"
+                    />
                   </TableCell>
-                  <TableCell className="font-medium text-foreground">{b.name}</TableCell>
+                  <TableCell className="font-medium text-foreground">
+                    {b.name}
+                  </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    <span className="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">{b.category}</span>
+                    <span className="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">
+                      {b.category}
+                    </span>
                   </TableCell>
-                  <TableCell className="hidden lg:table-cell text-muted-foreground text-sm max-w-xs truncate">{b.description}</TableCell>
-                  <TableCell className="font-semibold text-primary">${b.price.toFixed(2)}</TableCell>
+                  <TableCell className="hidden lg:table-cell text-muted-foreground text-sm max-w-xs truncate">
+                    {b.description}
+                  </TableCell>
+                  <TableCell className="font-semibold text-primary">
+                    ${b.price.toFixed(2)}
+                  </TableCell>
                   <TableCell className="hidden sm:table-cell">
                     <div className="flex items-center gap-1">
                       <Star className="w-3 h-3 text-gold fill-gold" />
@@ -105,10 +155,18 @@ const Products = () => {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
-                      <Button size="icon" variant="ghost" onClick={() => openEdit(b)}>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => openEdit(b)}
+                      >
                         <Pencil className="w-4 h-4" />
                       </Button>
-                      <Button size="icon" variant="ghost" onClick={() => handleDelete(b)}>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => handleDelete(b)}
+                      >
                         <Trash2 className="w-4 h-4 text-destructive" />
                       </Button>
                     </div>
@@ -117,7 +175,10 @@ const Products = () => {
               ))}
               {burgers.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center text-muted-foreground py-12">
+                  <TableCell
+                    colSpan={7}
+                    className="text-center text-muted-foreground py-12"
+                  >
                     No products yet. Click "Add Product" to get started.
                   </TableCell>
                 </TableRow>
@@ -137,43 +198,100 @@ const Products = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+              <Input
+                id="name"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
-              <Textarea id="description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2} />
+              <Textarea
+                id="description"
+                value={form.description}
+                onChange={(e) =>
+                  setForm({ ...form, description: e.target.value })
+                }
+                rows={2}
+              />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="price">Price ($)</Label>
-                <Input id="price" type="number" step="0.01" value={form.price} onChange={(e) => setForm({ ...form, price: parseFloat(e.target.value) || 0 })} />
+                <Input
+                  id="price"
+                  type="number"
+                  step="0.01"
+                  value={form.price}
+                  onChange={(e) =>
+                    setForm({ ...form, price: parseFloat(e.target.value) || 0 })
+                  }
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="rating">Rating</Label>
-                <Input id="rating" type="number" step="0.1" min="0" max="5" value={form.rating} onChange={(e) => setForm({ ...form, rating: parseFloat(e.target.value) || 0 })} />
+                <Input
+                  id="rating"
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  max="5"
+                  value={form.rating}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      rating: parseFloat(e.target.value) || 0,
+                    })
+                  }
+                />
               </div>
             </div>
             <div className="space-y-2">
               <Label>Category</Label>
-              <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+              <Select
+                value={form.category}
+                onValueChange={(v) => setForm({ ...form, category: v })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   {categories.map((c) => (
-                    <SelectItem key={c.id} value={c.name}>{c.name}</SelectItem>
+                    <SelectItem key={c.id} value={c.name}>
+                      {c.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="image">Image URL</Label>
-              <Input id="image" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="https://..." />
+              <Input
+                id="image"
+                value={form.image}
+                onChange={(e) => setForm({ ...form, image: e.target.value })}
+                placeholder="https://..."
+              />
               {form.image && (
-                <img src={form.image} alt="preview" className="w-full h-32 object-cover rounded-lg mt-2" />
+                <img
+                  src={form.image}
+                  alt="preview"
+                  className="w-full h-32 object-cover rounded-lg mt-2"
+                />
               )}
             </div>
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-              <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
                 {editingId !== null ? "Save Changes" : "Add Product"}
               </Button>
             </DialogFooter>
