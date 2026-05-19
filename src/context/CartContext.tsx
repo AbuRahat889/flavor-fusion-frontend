@@ -28,7 +28,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return prevItems.map((item) =>
           item.id === burger.id
             ? { ...item, quantity: item.quantity + 1 }
-            : item
+            : item,
         );
       }
       return [...prevItems, { ...burger, quantity: 1 }];
@@ -46,9 +46,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
     setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, quantity } : item
-      )
+      prevItems.map((item) => (item.id === id ? { ...item, quantity } : item)),
     );
   };
 
@@ -59,7 +57,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
-    0
+    0,
   );
 
   return (

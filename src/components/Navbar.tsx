@@ -78,8 +78,11 @@ const Navbar = () => {
                 </span>
               )}
             </Button>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground px-6">
-              Order Now
+            <Button
+              href="/admin/login"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-6"
+            >
+              Login
             </Button>
           </div>
 
@@ -116,7 +119,7 @@ const Navbar = () => {
               </a>
             ))}
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground w-full mt-2">
-              Order Now
+              Login
             </Button>
           </div>
         </div>

@@ -6,7 +6,13 @@ import { Lock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { useAdminAuth, DEMO_ADMIN } from "@/context/AdminAuthContext";
 import { toast } from "sonner";
 
@@ -81,7 +87,8 @@ const AdminLogin = () => {
               Sign In
             </Button>
             <p className="text-xs text-center text-muted-foreground">
-              Demo credentials: <span className="font-mono">{DEMO_ADMIN.username}</span> /{" "}
+              Demo credentials:{" "}
+              <span className="font-mono">{DEMO_ADMIN.username}</span> /{" "}
               <span className="font-mono">{DEMO_ADMIN.password}</span>
             </p>
           </form>

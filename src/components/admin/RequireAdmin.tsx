@@ -8,15 +8,15 @@ const RequireAdmin = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, isReady } = useAdminAuth();
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (isReady && !isAuthenticated) {
-  //     router.replace("/admin/login");
-  //   }
-  // }, [isReady, isAuthenticated, router]);
+  useEffect(() => {
+    if (isReady && !isAuthenticated) {
+      router.replace("/admin/login");
+    }
+  }, [isReady, isAuthenticated, router]);
 
-  // if (!isReady || !isAuthenticated) {
-  //   return null;
-  // }
+  if (!isReady || !isAuthenticated) {
+    return null;
+  }
 
   return <>{children}</>;
 };
