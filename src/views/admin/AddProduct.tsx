@@ -38,13 +38,6 @@ export default function AddProduct({
 }) {
   const { data } = useGetAllCategoriesQuery("");
   const categories = data?.data || [];
-  const selectedCategory = categories?.find(
-    (c: Category) =>
-      String(c.id) === String(form.categoryId) || c.id === form.categoryId,
-  );
-  const selectedCategoryValue = selectedCategory
-    ? String(selectedCategory.id)
-    : "";
 
   const [createFN, { isLoading: isCreating }] = useCreateProductMutation();
   const [updateFN, { isLoading: isUpdating }] = useUpdateProductMutation();
@@ -55,7 +48,7 @@ export default function AddProduct({
       description: form.description,
       price: form.price,
       image: form.image,
-      categoryId: selectedCategoryValue,
+      categoryId: form.category,
     };
     const res = await handleApiResponse(
       editingId !== null ? updateFN : createFN,
@@ -131,12 +124,19 @@ export default function AddProduct({
             <div className="space-y-2">
               <Label>Category</Label>
               <Select
-                value={selectedCategoryValue}
+                value={
+                  form?.category?.id
+                    ? form.category.id
+                    : form?.category
+                      ? form.category
+                      : ""
+                }
                 onValueChange={(v) => setForm({ ...form, category: v })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
+
                 <SelectContent>
                   {categories?.map((c: Category) => (
                     <SelectItem key={c.id} value={String(c.id)}>
@@ -150,6 +150,7 @@ export default function AddProduct({
               <Label htmlFor="image">Image URL</Label>
               <Input
                 id="image"
+                type="url"
                 value={form.image}
                 onChange={(e) => setForm({ ...form, image: e.target.value })}
                 placeholder="https://..."
