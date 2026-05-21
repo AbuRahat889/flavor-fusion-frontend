@@ -38,6 +38,13 @@ export default function AddProduct({
 }) {
   const { data } = useGetAllCategoriesQuery("");
   const categories = data?.data || [];
+  const selectedCategory = categories?.find(
+    (c: Category) =>
+      String(c.id) === String(form.categoryId) || c.id === form.categoryId,
+  );
+  const selectedCategoryValue = selectedCategory
+    ? String(selectedCategory.id)
+    : "";
 
   const [createFN, { isLoading: isCreating }] = useCreateProductMutation();
   const [updateFN, { isLoading: isUpdating }] = useUpdateProductMutation();
@@ -48,7 +55,7 @@ export default function AddProduct({
       description: form.description,
       price: form.price,
       image: form.image,
-      categoryId: form.category,
+      categoryId: selectedCategoryValue,
     };
     const res = await handleApiResponse(
       editingId !== null ? updateFN : createFN,
@@ -124,15 +131,15 @@ export default function AddProduct({
             <div className="space-y-2">
               <Label>Category</Label>
               <Select
-                value={form.category}
+                value={selectedCategoryValue}
                 onValueChange={(v) => setForm({ ...form, category: v })}
               >
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories?.map((c: Category) => (
-                    <SelectItem key={c.id} value={c.id}>
+                    <SelectItem key={c.id} value={String(c.id)}>
                       {c.name}
                     </SelectItem>
                   ))}

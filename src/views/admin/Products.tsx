@@ -11,14 +11,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useCategories } from "@/context/CategoryContext";
-import { useGetAllProductsQuery } from "@/redux/api/productsApi";
+import { handleApiResponse } from "@/lib/handleRTKResponse";
+import {
+  useDeleteProductMutation,
+  useGetAllProductsQuery,
+} from "@/redux/api/productsApi";
 import { Burger } from "@/types/burger";
 import { Pencil, Plus, Star, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { toast } from "sonner";
 import AddProduct from "./AddProduct";
+import Swal from "sweetalert2";
 
 type FormState = Omit<Burger, "id">;
 const empty: FormState = {
@@ -31,7 +34,6 @@ const empty: FormState = {
 };
 
 const Products = () => {
-  const { categories } = useCategories();
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState<FormState>(empty);
@@ -41,7 +43,7 @@ const Products = () => {
 
   const openAdd = () => {
     setEditingId(null);
-    setForm({ ...empty, category: categories[0]?.name ?? "Beef" });
+    setForm({ ...empty, category: "" });
     setOpen(true);
   };
   const openEdit = (b: Burger) => {
@@ -51,11 +53,56 @@ const Products = () => {
     setOpen(true);
   };
 
-  const handleDelete = (b: Burger) => {
-    if (confirm(`Delete "${b.name}"?`)) {
-      // deleteBurger(b.id);
-      toast.success("Product deleted");
-    }
+  const [deleteFN, { isLoading: isDeleting }] = useDeleteProductMutation();
+  const handleDelete = async (id: string) => {
+    if (isDeleting) return;
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: isDeleting ? "Deleting..." : "Yes, delete it!",
+      allowOutsideClick: !isDeleting,
+      didOpen: () => {
+        if (isDeleting) {
+          Swal.showLoading();
+        }
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleting...",
+          text: "Please wait",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        const res = await handleApiResponse(
+          deleteFN,
+          id,
+          "Product deleted successfully",
+          false,
+        );
+        if (res?.success) {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your product has been deleted.",
+            icon: "success",
+          });
+        } else {
+          Swal.fire({
+            title: "Failed!",
+            text: res?.error || "Something went wrong.",
+            icon: "error",
+          });
+        }
+      }
+    });
   };
 
   return (
@@ -137,7 +184,7 @@ const Products = () => {
                       <Button
                         size="icon"
                         variant="ghost"
-                        onClick={() => handleDelete(b)}
+                        onClick={() => handleDelete(b.id)}
                       >
                         <Trash2 className="w-4 h-4 text-destructive" />
                       </Button>
