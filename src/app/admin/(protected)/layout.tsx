@@ -1,6 +1,5 @@
 "use client";
 
-import RequireAdmin from "@/components/admin/RequireAdmin";
 import AdminLayout from "@/views/admin/AdminLayout";
 
 export default function AdminProtectedLayout({
@@ -9,8 +8,8 @@ export default function AdminProtectedLayout({
   children: React.ReactNode;
 }) {
   return (
-    <RequireAdmin>
+    <>
       <AdminLayout>{children}</AdminLayout>
-    </RequireAdmin>
+    </>
   );
 }
