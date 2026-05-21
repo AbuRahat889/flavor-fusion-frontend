@@ -13,7 +13,12 @@ export const handleApiResponse = async <T>(
 
     if (res?.data?.success) {
       if (showSuccessToast) {
-        toast.success(res?.data?.message || successMessage);
+        toast.success(res?.data?.message || successMessage, {
+          style: {
+            background: "#32231e",
+            color: "#d05b2b",
+          },
+        });
       }
       return { success: true, data: res.data };
     } else {

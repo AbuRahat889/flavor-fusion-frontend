@@ -10,7 +10,8 @@ export interface Order {
 }
 
 export interface Category {
-  id: number;
+  id: string;
   name: string;
   description?: string;
+  productCount?: number;
 }
