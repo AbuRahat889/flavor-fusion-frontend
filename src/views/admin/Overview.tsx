@@ -1,5 +1,6 @@
 "use client";
 
+import { OverviewSk } from "@/components/Skleton/OverviewSk";
 import { formatDate } from "@/lib/formatDate";
 import { useGetOverviewQuery } from "@/redux/api/dashboard";
 import {
@@ -31,7 +32,7 @@ const statusColors: Record<string, string> = {
 };
 
 const Overview = () => {
-  const { data } = useGetOverviewQuery("");
+  const { data, isLoading, isError, isFetching } = useGetOverviewQuery("");
   const overview = data?.data;
 
   const stats = [
@@ -62,6 +63,15 @@ const Overview = () => {
       sub: "active",
     },
   ];
+
+  if (isLoading || isFetching) return <OverviewSk />;
+
+  if (isError)
+    return (
+      <div className="text-center text-destructive">
+        Failed to load overview data.
+      </div>
+    );
 
   return (
     <div className="space-y-6">
