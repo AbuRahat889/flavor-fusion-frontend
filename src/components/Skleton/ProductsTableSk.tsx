@@ -1,18 +1,11 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
+import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 
 export const ProductsTableSk = () => {
   return (
     <div className="rounded-xl border border-border/50 bg-card overflow-hidden animate-pulse">
       <div className="overflow-x-auto">
         <Table>
-          <TableHeader>
+          {/* <TableHeader>
             <TableRow>
               <TableHead>Image</TableHead>
               <TableHead>Name</TableHead>
@@ -24,7 +17,7 @@ export const ProductsTableSk = () => {
               <TableHead className="hidden sm:table-cell">Rating</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
-          </TableHeader>
+          </TableHeader> */}
 
           <TableBody>
             {Array.from({ length: 6 }).map((_, i) => (
