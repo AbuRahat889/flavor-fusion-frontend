@@ -10,7 +10,6 @@ import {
   Home,
   LogOut,
 } from "lucide-react";
-import { useAdminAuth } from "@/context/AdminAuthContext";
 import {
   Sidebar,
   SidebarContent,
@@ -35,11 +34,10 @@ export function AdminSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const pathname = usePathname();
-  const { logout } = useAdminAuth();
+
   const router = useRouter();
 
   const handleLogout = () => {
-    logout();
     router.replace("/admin/login");
   };
 

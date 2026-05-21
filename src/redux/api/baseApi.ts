@@ -1,12 +1,9 @@
 // src/api/baseApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import Cookies from "js-cookie";
 
 // Utility function to handle the base API URL
 const baseApiHandler = () => {
-  //need to change the socket api url based on deployment
-  // const apiUrl = "http://10.0.30.18:5006/api/v1";
-  const apiUrl = "https://api.cityadventuredating.com/api/v1";
+  const apiUrl = "http://localhost:5000/api/v1";
 
   return apiUrl;
 };
@@ -18,7 +15,7 @@ export const baseApi = createApi({
     baseUrl: baseApiHandler(),
     prepareHeaders: (headers) => {
       // const token = (getState() as RootState).auth.token;
-      const token = Cookies.get("token");
+      const token = sessionStorage.getItem("token");
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
@@ -26,14 +23,5 @@ export const baseApi = createApi({
     },
   }),
   endpoints: () => ({}),
-  tagTypes: [
-    "users",
-    "subscriptions",
-    "contacts",
-    "products",
-    "message",
-    "friendship",
-    "reports",
-    "dashbaord",
-  ],
+  tagTypes: ["auth", "dashboard"],
 });

@@ -1,12 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Lock, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -14,8 +12,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useLoginUserMutation } from "@/redux/api/auth";
+import { handleApiResponse } from "@/lib/handleRTKResponse";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
 
 type LoginFormValues = {
   email: string;
@@ -36,27 +38,22 @@ const AdminLogin = () => {
     },
   });
 
+  const [loginFN] = useLoginUserMutation();
   const onSubmit = async (data: LoginFormValues) => {
-    try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || "Login failed");
+    const payload = {
+      email: data.email,
+      password: data.password,
+    };
+    const res = await handleApiResponse(loginFN, payload, "Login successful");
+    if (res?.success) {
+      if (res?.data?.data?.user?.role !== "ADMIN") {
+        toast.error("Unauthorized access. Only admins can log in.");
+        return;
       }
-
-      toast.success("Login successful");
-
+      sessionStorage.setItem("token", res?.data?.data?.token);
+      sessionStorage.setItem("role", res?.data?.data?.user?.role);
+      Cookies.set("token", res?.data?.data?.token);
       router.push("/admin");
-    } catch (error: any) {
-      toast.error(error.message);
     }
   };
 
