@@ -14,7 +14,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/context/CartContext";
-import { useOrders } from "@/context/OrderContext";
 import { toast } from "sonner";
 
 type PaymentMethod = "card" | "cod";
@@ -25,8 +24,8 @@ interface CheckoutDialogProps {
 }
 
 const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
-  const { items, totalPrice, clearCart } = useCart();
-  const { addOrder } = useOrders();
+  const { items, totalPrice } = useCart();
+  // const { addOrder } = useOrders();
 
   const [step, setStep] = useState<"form" | "processing" | "success">("form");
   const [method, setMethod] = useState<PaymentMethod>("card");
@@ -36,7 +35,7 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
   const [cardNumber, setCardNumber] = useState("");
   const [cardExpiry, setCardExpiry] = useState("");
   const [cardCvc, setCardCvc] = useState("");
-  const [orderId, setOrderId] = useState("");
+  const [orderId] = useState("");
 
   const deliveryFee = 2.99;
   const grandTotal = totalPrice + deliveryFee;
@@ -80,26 +79,33 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
 
     setStep("processing");
 
-    setTimeout(() => {
-      const order = addOrder({
-        customer: name,
-        items: items.map((i) => ({ name: i.name, quantity: i.quantity, price: i.price })),
-        total: grandTotal,
-      });
-      setOrderId(order.id);
-      clearCart();
-      setStep("success");
-      toast.success(
-        method === "card" ? "Payment successful!" : "Order placed! Pay on delivery."
-      );
-    }, 1500);
+    // setTimeout(() => {
+    //   const order = addOrder({
+    //     customer: name,
+    //     items: items.map((i) => ({ name: i.name, quantity: i.quantity, price: i.price })),
+    //     total: grandTotal,
+    //   });
+    //   setOrderId(order.id);
+    //   clearCart();
+    //   setStep("success");
+    //   toast.success(
+    //     method === "card" ? "Payment successful!" : "Order placed! Pay on delivery."
+    //   );
+    // }, 1500);
   };
 
   const formatCard = (v: string) =>
-    v.replace(/\D/g, "").slice(0, 16).replace(/(.{4})/g, "$1 ").trim();
+    v
+      .replace(/\D/g, "")
+      .slice(0, 16)
+      .replace(/(.{4})/g, "$1 ")
+      .trim();
 
   return (
-    <Dialog open={open} onOpenChange={(o) => (!o ? resetAndClose() : onOpenChange(o))}>
+    <Dialog
+      open={open}
+      onOpenChange={(o) => (!o ? resetAndClose() : onOpenChange(o))}
+    >
       <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         {step === "success" ? (
           <div className="text-center py-6 space-y-4">
@@ -107,9 +113,13 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
               <CheckCircle2 className="w-8 h-8 text-primary" />
             </div>
             <div>
-              <h3 className="font-serif text-xl font-semibold">Order Confirmed!</h3>
+              <h3 className="font-serif text-xl font-semibold">
+                Order Confirmed!
+              </h3>
               <p className="text-sm text-muted-foreground mt-1">
-                Order <span className="font-mono text-foreground">{orderId}</span> has been placed.
+                Order{" "}
+                <span className="font-mono text-foreground">{orderId}</span> has
+                been placed.
               </p>
               <p className="text-xs text-muted-foreground mt-2">
                 {method === "cod"
@@ -132,17 +142,29 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
           <>
             <DialogHeader>
               <DialogTitle className="font-serif">Checkout</DialogTitle>
-              <DialogDescription>Complete your order details below.</DialogDescription>
+              <DialogDescription>
+                Complete your order details below.
+              </DialogDescription>
             </DialogHeader>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
-                <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+                <Input
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone</Label>
-                <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+                <Input
+                  id="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="address">Delivery Address</Label>
@@ -166,7 +188,9 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
                 >
                   <label
                     className={`flex items-center gap-2 p-3 rounded-md border cursor-pointer transition-colors ${
-                      method === "card" ? "border-primary bg-primary/5" : "border-border"
+                      method === "card"
+                        ? "border-primary bg-primary/5"
+                        : "border-border"
                     }`}
                   >
                     <RadioGroupItem value="card" id="pm-card" />
@@ -175,12 +199,16 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
                   </label>
                   <label
                     className={`flex items-center gap-2 p-3 rounded-md border cursor-pointer transition-colors ${
-                      method === "cod" ? "border-primary bg-primary/5" : "border-border"
+                      method === "cod"
+                        ? "border-primary bg-primary/5"
+                        : "border-border"
                     }`}
                   >
                     <RadioGroupItem value="cod" id="pm-cod" />
                     <Wallet className="w-4 h-4" />
-                    <span className="text-sm font-medium">Cash on Delivery</span>
+                    <span className="text-sm font-medium">
+                      Cash on Delivery
+                    </span>
                   </label>
                 </RadioGroup>
               </div>
@@ -193,7 +221,9 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
                       id="card"
                       placeholder="4242 4242 4242 4242"
                       value={cardNumber}
-                      onChange={(e) => setCardNumber(formatCard(e.target.value))}
+                      onChange={(e) =>
+                        setCardNumber(formatCard(e.target.value))
+                      }
                       inputMode="numeric"
                       required
                     />
@@ -207,7 +237,8 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
                         value={cardExpiry}
                         onChange={(e) => {
                           let v = e.target.value.replace(/\D/g, "").slice(0, 4);
-                          if (v.length >= 3) v = v.slice(0, 2) + "/" + v.slice(2);
+                          if (v.length >= 3)
+                            v = v.slice(0, 2) + "/" + v.slice(2);
                           setCardExpiry(v);
                         }}
                         required
@@ -219,7 +250,11 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
                         id="cvc"
                         placeholder="123"
                         value={cardCvc}
-                        onChange={(e) => setCardCvc(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                        onChange={(e) =>
+                          setCardCvc(
+                            e.target.value.replace(/\D/g, "").slice(0, 4),
+                          )
+                        }
                         required
                       />
                     </div>
@@ -240,12 +275,16 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
                 </div>
                 <div className="flex justify-between font-semibold pt-1">
                   <span>Total</span>
-                  <span className="text-primary text-base">${grandTotal.toFixed(2)}</span>
+                  <span className="text-primary text-base">
+                    ${grandTotal.toFixed(2)}
+                  </span>
                 </div>
               </div>
 
               <Button type="submit" className="w-full" size="lg">
-                {method === "card" ? `Pay $${grandTotal.toFixed(2)}` : "Place Order"}
+                {method === "card"
+                  ? `Pay $${grandTotal.toFixed(2)}`
+                  : "Place Order"}
               </Button>
             </form>
           </>
