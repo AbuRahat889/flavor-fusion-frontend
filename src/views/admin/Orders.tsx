@@ -128,7 +128,7 @@ const Orders = () => {
                         .join(", ")}
                     </TableCell>
                     <TableCell className="font-semibold text-primary">
-                      ${o.total.toFixed(2)}
+                      ৳ {o.total}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell text-sm text-muted-foreground">
                       {formatDate(o.createdAt)}

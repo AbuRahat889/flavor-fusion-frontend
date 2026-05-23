@@ -2,22 +2,78 @@ import { Button } from "@/components/ui/button";
 import { useGetAllCategoriesQuery } from "@/redux/api/categoriesApi";
 import { useGetAllProductsQuery } from "@/redux/api/productsApi";
 import { Categories, Items } from "@/types/burger";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Loader2 } from "lucide-react";
 import ProductCard from "./ProductCard";
 
 const MenuSection = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
+  const [products, setProducts] = useState<Items[]>([]);
+  const [isSentinelVisible, setIsSentinelVisible] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   const { data: categorieData } = useGetAllCategoriesQuery("");
 
-  const { data } = useGetAllProductsQuery({
+  const { data, isFetching, isLoading } = useGetAllProductsQuery({
     categoryId: activeCategory === "All" ? undefined : activeCategory,
     page: currentPage,
-    limit: 2,
+    limit: 6,
   });
-  const products = data?.data?.items || [];
   const totalPages = data?.data?.meta?.totalPages || 1;
+
+  useEffect(() => {
+    setCurrentPage(1);
+    setProducts([]);
+  }, [activeCategory]);
+
+  useEffect(() => {
+    const nextProducts = data?.data?.items || [];
+
+    setProducts((prev) => {
+      if (currentPage === 1) {
+        return nextProducts;
+      }
+
+      const existingIds = new Set(prev.map((item) => item.id));
+      const merged = [...prev];
+
+      nextProducts.forEach((item: Items) => {
+        if (!existingIds.has(item.id)) {
+          merged.push(item);
+        }
+      });
+
+      return merged;
+    });
+  }, [data, currentPage]);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsSentinelVisible(entry.isIntersecting);
+      },
+      {
+        root: null,
+        rootMargin: "100px",
+        threshold: 0,
+      },
+    );
+
+    observer.observe(sentinel);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (isSentinelVisible && !isFetching && currentPage < totalPages) {
+      setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev));
+    }
+  }, [isSentinelVisible, isFetching, currentPage, totalPages]);
 
   const categories = useMemo(
     () => [
@@ -74,20 +130,33 @@ const MenuSection = () => {
         {/* Menu Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {products?.map((item: Items, index: number) => (
-            <ProductCard key={item?.id} item={item} index={index} />
+            <ProductCard
+              key={item?.id}
+              item={item}
+              index={index}
+              loading={isFetching || isLoading}
+            />
           ))}
         </div>
-        {/* View All Button */}
-        <div className="text-center mt-12">
-          <Button
-            variant="outline"
-            className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8"
-            onClick={() => {
-              setCurrentPage((prev) => prev + 1);
-            }}
-          >
-            {totalPages === currentPage ? "No More Items" : "View Full Menu"}
-          </Button>
+        <div ref={sentinelRef} className="mt-8 flex justify-center py-6">
+          {currentPage < totalPages && isFetching ? (
+            <div className="flex items-center gap-3 rounded-full border border-border bg-card px-5 py-3 text-sm text-muted-foreground shadow-sm">
+              <Loader2 className="w-10 h-10 animate-spin text-primary" />
+              Loading more products...
+            </div>
+          ) : currentPage < totalPages ? (
+            <Button
+              variant="outline"
+              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8"
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+            >
+              Load more
+            </Button>
+          ) : (
+            <span className="text-sm text-primary">
+              You&apos;ve reached the end of the menu.
+            </span>
+          )}
         </div>
       </div>
     </section>

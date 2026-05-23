@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 
 import defaultImage from "@/assets/placeholder.svg";
+import { ProductsTableSk } from "@/components/Skleton/ProductsTableSk";
 import {
   Table,
   TableBody,
@@ -16,38 +17,43 @@ import {
   useDeleteProductMutation,
   useGetAllProductsQuery,
 } from "@/redux/api/productsApi";
-import { Burger } from "@/types/burger";
 import { Pencil, Plus, Star, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import AddProduct from "./AddProduct";
 import Swal from "sweetalert2";
-import { ProductsTableSk } from "@/components/Skleton/ProductsTableSk";
+import AddProduct from "./AddProduct";
+import { Items } from "@/types/burger";
 
-type FormState = Omit<Burger, "id">;
+type FormState = Omit<Items, "id">;
 const empty: FormState = {
   name: "",
   description: "",
   price: 0,
   rating: 4.5,
   image: "",
-  category: "Beef",
+  category: {
+    id: "",
+    name: "",
+  },
 };
 
 const Products = () => {
   const [open, setOpen] = useState(false);
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(empty);
 
-  const { data, isLoading, isFetching, isError } = useGetAllProductsQuery("");
+  const { data, isLoading, isFetching, isError } = useGetAllProductsQuery({
+    page: 1,
+    limit: 100,
+  });
   const products = data?.data?.items || [];
 
   const openAdd = () => {
     setEditingId(null);
-    setForm({ ...empty, category: "" });
+    setForm({ ...empty, category: { id: "", name: "" } });
     setOpen(true);
   };
-  const openEdit = (b: Burger) => {
+  const openEdit = (b: Items) => {
     setEditingId(b.id);
     const { ...rest } = b;
     setForm(rest);
@@ -141,6 +147,7 @@ const Products = () => {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>#</TableHead>
                   <TableHead>Image</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead className="hidden md:table-cell">
@@ -155,8 +162,11 @@ const Products = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {products?.map((b) => (
+                {products?.map((b, index: number) => (
                   <TableRow key={b.id}>
+                    <TableCell className="font-medium text-foreground">
+                      {index + 1}
+                    </TableCell>
                     <TableCell>
                       <Image
                         src={b.image || defaultImage}

@@ -132,7 +132,7 @@ const Overview = () => {
                 </div>
                 <div className="text-right">
                   <p className="font-semibold text-primary text-sm">
-                    ${o.total}
+                    ৳ {o.total}
                   </p>
                   <span
                     className={`text-[10px] px-2 py-0.5 rounded-full ${statusColors[o.status.toLowerCase()]}`}

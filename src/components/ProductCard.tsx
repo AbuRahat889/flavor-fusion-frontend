@@ -9,17 +9,17 @@ import { toast } from "sonner";
 export default function ProductCard({
   item,
   index,
- 
 }: {
   item: Items;
   index: number;
-
+  loading: boolean;
 }) {
   const { addToCart } = useCart();
   const handleAddToCart = (item: Items) => {
     addToCart(item);
     toast.success(`${item.name} added to cart!`);
   };
+
   return (
     <div>
       <div
@@ -62,7 +62,7 @@ export default function ProductCard({
 
           <div className="flex items-center justify-between">
             <span className="text-2xl font-bold text-primary">
-              ${item?.price.toFixed(2)}
+              ৳ {item?.price}
             </span>
             <Button
               size="sm"
