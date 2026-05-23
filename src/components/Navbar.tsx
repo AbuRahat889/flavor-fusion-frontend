@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { cn } from "@/lib/utils";
 import { Menu, ShoppingCart, X } from "lucide-react";
+import Link from "next/link";
 
 const navLinks = [
   { name: "Home", href: "#home" },
@@ -33,7 +34,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <a href="#home" className="flex items-center gap-2">
+          <Link href="#home" className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
               <span className="text-primary-foreground font-serif font-bold text-xl">
                 F
@@ -42,12 +43,12 @@ const Navbar = () => {
             <span className="font-serif text-2xl font-bold text-foreground">
               Flavor<span className="text-primary">Fusion</span>
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
                 href={link.href}
                 onClick={() => setActiveHash(link.href)}
@@ -59,7 +60,7 @@ const Navbar = () => {
                 )}
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -101,7 +102,7 @@ const Navbar = () => {
         <div className="md:hidden bg-card border-t border-border">
           <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
                 href={link.href}
                 onClick={() => {
@@ -116,7 +117,7 @@ const Navbar = () => {
                 )}
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground w-full mt-2">
               Login
