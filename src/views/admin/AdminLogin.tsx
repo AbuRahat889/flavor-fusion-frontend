@@ -38,7 +38,7 @@ const AdminLogin = () => {
     },
   });
 
-  const [loginFN] = useLoginUserMutation();
+  const [loginFN, { isLoading }] = useLoginUserMutation();
   const onSubmit = async (data: LoginFormValues) => {
     const payload = {
       email: data.email,
@@ -122,13 +122,13 @@ const AdminLogin = () => {
             </div>
 
             <Button type="submit" className="w-full" size="lg">
-              Sign In
+              {isLoading ? "Signing In..." : "Sign In"}
             </Button>
 
             <p className="text-xs text-center text-muted-foreground">
               Demo credentials:{" "}
               <span className="font-mono">admin@gmail.com</span> /{" "}
-              <span className="font-mono">admin123</span>
+              <span className="font-mono">123456</span>
             </p>
           </form>
         </CardContent>

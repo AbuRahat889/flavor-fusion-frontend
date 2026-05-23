@@ -1,15 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import {
-  LayoutDashboard,
-  UtensilsCrossed,
-  ShoppingBag,
-  Tag,
-  Home,
-  LogOut,
-} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -22,6 +12,17 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
+import {
+  Home,
+  LayoutDashboard,
+  LogOut,
+  ShoppingBag,
+  Tag,
+  UtensilsCrossed,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const items = [
   { title: "Overview", url: "/admin", icon: LayoutDashboard, end: true },
@@ -38,6 +39,9 @@ export function AdminSidebar() {
   const router = useRouter();
 
   const handleLogout = () => {
+    sessionStorage.removeItem("role");
+    sessionStorage.removeItem("token");
+    Cookies.remove("token");
     router.replace("/admin/login");
   };
 
