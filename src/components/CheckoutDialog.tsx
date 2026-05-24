@@ -54,7 +54,6 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
       setCardExpiry("");
       setCardCvc("");
       setMethod("cod");
-      clearCart();
     }, 300);
   };
 
@@ -97,8 +96,6 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
       "Order placed successfully!",
       false,
     );
-    console.log(res);
-
     if (res?.success) {
       setStep("success");
       toast.success(
@@ -106,7 +103,7 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
           ? "Payment successful!"
           : "Order placed! Pay on delivery.",
       );
-      useCart().clearCart();
+      clearCart();
       // resetAndClose();
     } else {
       toast.error(res?.error || "Failed to place order");

@@ -1,7 +1,15 @@
 "use client";
 
 import { CartItem, Items } from "@/types/burger";
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+
+const CART_STORAGE_KEY = "flavor-fusion-cart";
 
 interface CartContextType {
   items: CartItem[];
@@ -20,6 +28,37 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [hasHydrated, setHasHydrated] = useState(false);
+
+  useEffect(() => {
+    try {
+      const storedCart = window.localStorage.getItem(CART_STORAGE_KEY);
+      if (storedCart) {
+        setItems(JSON.parse(storedCart));
+      }
+    } catch {
+      // Ignore storage or parsing failures and fall back to an empty cart.
+    } finally {
+      setHasHydrated(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!hasHydrated) {
+      return;
+    }
+
+    try {
+      if (items.length === 0) {
+        window.localStorage.removeItem(CART_STORAGE_KEY);
+        return;
+      }
+
+      window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+    } catch {
+      // Ignore storage write failures so cart usage still works in memory.
+    }
+  }, [hasHydrated, items]);
 
   const addToCart = (item: Items) => {
     setItems((prevItems) => {

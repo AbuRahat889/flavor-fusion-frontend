@@ -32,7 +32,7 @@ const CartDrawer = () => {
   return (
     <>
       <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
-        <SheetContent className="w-full sm:max-w-lg bg-card border-border flex flex-col">
+        <SheetContent className="w-full sm:max-w-lg bg-card border-border flex flex-col ">
           <SheetHeader>
             <SheetTitle className="flex items-center gap-2 text-foreground font-serif">
               <ShoppingBag className="w-5 h-5 text-primary" />
@@ -59,7 +59,7 @@ const CartDrawer = () => {
           ) : (
             <>
               {/* Cart Items */}
-              <div className="flex-1 overflow-y-auto py-4 space-y-4">
+              <div className="flex-1 overflow-y-auto py-4 space-y-4 slim-scroll">
                 {items?.map((item) => (
                   <div
                     key={item.id}
@@ -141,9 +141,9 @@ const CartDrawer = () => {
                 </Button>
 
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   onClick={clearCart}
-                  className="w-full text-muted-foreground hover:text-destructive"
+                  className="w-full"
                 >
                   Clear Cart
                 </Button>
