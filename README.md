@@ -4,9 +4,9 @@ A beautiful Next.js + TypeScript storefront built with Tailwind CSS and shadcn/u
 
 ## Live demo
 
-- **Live URL**: https://flavor-fusion-ashen-five.vercel.app
+- **Live URL**: <a href="https://flavor-fusion-ashen-five.vercel.app" target="_blank" rel="noopener noreferrer">https://flavor-fusion-ashen-five.vercel.app</a>
 
-> Replace the `REPLACE_WITH_YOUR_LIVE_URL` value above with your deployed site URL.
+> The link above opens in a new tab. Replace the `REPLACE_WITH_YOUR_LIVE_URL` value above with your deployed site URL.
 
 ## Screenshots
 
