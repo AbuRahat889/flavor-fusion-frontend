@@ -15,6 +15,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/context/CartContext";
 import { toast } from "sonner";
+import { useCreateOrderMutation } from "@/redux/api/ordersApi";
+import { handleApiResponse } from "@/lib/handleRTKResponse";
 
 type PaymentMethod = "card" | "cod";
 
@@ -24,12 +26,13 @@ interface CheckoutDialogProps {
 }
 
 const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
-  const { items, totalPrice } = useCart();
+  const { items, totalPrice, clearCart } = useCart();
   // const { addOrder } = useOrders();
 
   const [step, setStep] = useState<"form" | "processing" | "success">("form");
-  const [method, setMethod] = useState<PaymentMethod>("card");
+  const [method, setMethod] = useState<PaymentMethod>("cod");
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [cardNumber, setCardNumber] = useState("");
@@ -37,7 +40,7 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
   const [cardCvc, setCardCvc] = useState("");
   const [orderId] = useState("");
 
-  const deliveryFee = 2.99;
+  const deliveryFee = 40;
   const grandTotal = totalPrice + deliveryFee;
 
   const resetAndClose = () => {
@@ -50,11 +53,14 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
       setCardNumber("");
       setCardExpiry("");
       setCardCvc("");
-      setMethod("card");
+      setMethod("cod");
+      clearCart();
     }, 300);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [createOrderFN, { isLoading }] = useCreateOrderMutation();
+  const handleSubmit = async (e: React.FormEvent) => {
+    setStep("processing");
     e.preventDefault();
     if (items.length === 0) {
       toast.error("Your cart is empty");
@@ -77,21 +83,35 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
       }
     }
 
-    setStep("processing");
+    const payload = {
+      customer: name,
+      phone: phone,
+      address: address,
+      email: email,
+      payment: method,
+      items: items?.map((i) => ({ productId: i.id, quantity: i.quantity })),
+    };
+    const res = await handleApiResponse(
+      createOrderFN,
+      payload,
+      "Order placed successfully!",
+      false,
+    );
+    console.log(res);
 
-    // setTimeout(() => {
-    //   const order = addOrder({
-    //     customer: name,
-    //     items: items.map((i) => ({ name: i.name, quantity: i.quantity, price: i.price })),
-    //     total: grandTotal,
-    //   });
-    //   setOrderId(order.id);
-    //   clearCart();
-    //   setStep("success");
-    //   toast.success(
-    //     method === "card" ? "Payment successful!" : "Order placed! Pay on delivery."
-    //   );
-    // }, 1500);
+    if (res?.success) {
+      setStep("success");
+      toast.success(
+        method === "card"
+          ? "Payment successful!"
+          : "Order placed! Pay on delivery.",
+      );
+      useCart().clearCart();
+      // resetAndClose();
+    } else {
+      toast.error(res?.error || "Failed to place order");
+      setStep("form");
+    }
   };
 
   const formatCard = (v: string) =>
@@ -106,7 +126,7 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
       open={open}
       onOpenChange={(o) => (!o ? resetAndClose() : onOpenChange(o))}
     >
-      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto slim-scroll">
         {step === "success" ? (
           <div className="text-center py-6 space-y-4">
             <div className="mx-auto w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
@@ -158,6 +178,16 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
                 />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="phone">Phone</Label>
                 <Input
                   id="phone"
@@ -188,17 +218,6 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
                 >
                   <label
                     className={`flex items-center gap-2 p-3 rounded-md border cursor-pointer transition-colors ${
-                      method === "card"
-                        ? "border-primary bg-primary/5"
-                        : "border-border"
-                    }`}
-                  >
-                    <RadioGroupItem value="card" id="pm-card" />
-                    <CreditCard className="w-4 h-4" />
-                    <span className="text-sm font-medium">Card</span>
-                  </label>
-                  <label
-                    className={`flex items-center gap-2 p-3 rounded-md border cursor-pointer transition-colors ${
                       method === "cod"
                         ? "border-primary bg-primary/5"
                         : "border-border"
@@ -209,6 +228,17 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
                     <span className="text-sm font-medium">
                       Cash on Delivery
                     </span>
+                  </label>
+                  <label
+                    className={`flex items-center gap-2 p-3 rounded-md border cursor-pointer transition-colors ${
+                      method === "card"
+                        ? "border-primary bg-primary/5"
+                        : "border-border"
+                    }`}
+                  >
+                    <RadioGroupItem value="card" id="pm-card" />
+                    <CreditCard className="w-4 h-4" />
+                    <span className="text-sm font-medium">Card</span>
                   </label>
                 </RadioGroup>
               </div>
@@ -267,24 +297,26 @@ const CheckoutDialog = ({ open, onOpenChange }: CheckoutDialogProps) => {
               <div className="space-y-1 text-sm">
                 <div className="flex justify-between text-muted-foreground">
                   <span>Subtotal</span>
-                  <span>${totalPrice.toFixed(2)}</span>
+                  <span>৳ {totalPrice}</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
                   <span>Delivery</span>
-                  <span>${deliveryFee.toFixed(2)}</span>
+                  <span>৳ {deliveryFee}</span>
                 </div>
                 <div className="flex justify-between font-semibold pt-1">
                   <span>Total</span>
-                  <span className="text-primary text-base">
-                    ${grandTotal.toFixed(2)}
-                  </span>
+                  <span className="text-primary text-base">৳ {grandTotal}</span>
                 </div>
               </div>
 
               <Button type="submit" className="w-full" size="lg">
                 {method === "card"
-                  ? `Pay $${grandTotal.toFixed(2)}`
-                  : "Place Order"}
+                  ? isLoading
+                    ? `Processing...`
+                    : `Pay ৳${grandTotal}`
+                  : isLoading
+                    ? "Processing..."
+                    : "Place Order"}
               </Button>
             </form>
           </>

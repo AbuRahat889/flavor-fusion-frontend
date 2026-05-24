@@ -64,7 +64,7 @@ export default function AddProduct({
   return (
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg max-h-screen overflow-y-auto slim-scroll">
           <DialogHeader>
             <DialogTitle className="font-serif text-2xl">
               {editingId !== null ? "Edit Product" : "Add New Product"}

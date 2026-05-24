@@ -1,8 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Slim Scrollbar Styling */
+.slim-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.slim-scroll::-webkit-scrollbar-thumb {
+  background-color: #d75327; /* Gray */
+  border-radius: 8px;
+}
+
+.slim-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #ff0000; /* Lighter Gray */
+}
+
+.slim-scroll::-webkit-scrollbar-track {
+  background-color: transparent;
+}
 
 @layer base {
   :root {
@@ -39,16 +57,20 @@
     /* Custom tokens */
     --gold: 45 100% 50%;
     --gold-foreground: 0 0% 10%;
-    
+
     --flame: 20 90% 50%;
     --flame-glow: 15 100% 60%;
-    
+
     --glass: 0 0% 100% / 0.05;
     --glass-border: 0 0% 100% / 0.1;
-    
-    --gradient-hero: linear-gradient(135deg, hsl(15 85% 55% / 0.2), transparent);
+
+    --gradient-hero: linear-gradient(
+      135deg,
+      hsl(15 85% 55% / 0.2),
+      transparent
+    );
     --gradient-card: linear-gradient(180deg, hsl(0 0% 10%), hsl(0 0% 6%));
-    
+
     --shadow-glow: 0 0 60px hsl(15 85% 55% / 0.3);
     --shadow-card: 0 25px 50px -12px hsl(0 0% 0% / 0.5);
   }
@@ -70,11 +92,16 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Playfair Display", serif;
   }
 }
 
@@ -82,17 +109,21 @@
   .glass-card {
     @apply bg-card/50 backdrop-blur-xl border border-white/10 rounded-2xl;
   }
-  
+
   .text-gradient {
     @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
   }
-  
+
   .glow-effect {
     box-shadow: var(--shadow-glow);
   }
-  
+
   .hero-glow {
-    background: radial-gradient(ellipse 80% 50% at 50% 0%, hsl(15 85% 55% / 0.15), transparent);
+    background: radial-gradient(
+      ellipse 80% 50% at 50% 0%,
+      hsl(15 85% 55% / 0.15),
+      transparent
+    );
   }
 }
 
@@ -100,26 +131,28 @@
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
-  
+
   .animate-float-delayed {
     animation: float 6s ease-in-out 2s infinite;
   }
-  
+
   .animate-pulse-glow {
     animation: pulse-glow 3s ease-in-out infinite;
   }
-  
+
   @keyframes float {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateY(0);
     }
     50% {
       transform: translateY(-20px);
     }
   }
-  
+
   @keyframes pulse-glow {
-    0%, 100% {
+    0%,
+    100% {
       box-shadow: 0 0 30px hsl(15 85% 55% / 0.3);
     }
     50% {
