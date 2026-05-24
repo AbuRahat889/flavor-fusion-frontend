@@ -12,11 +12,12 @@ A beautiful Next.js + TypeScript storefront built with Tailwind CSS and shadcn/u
 
 Landing page preview:
 
-![Landing preview](/images/landing.svg)
+![Landing preview](/images/landing.png)
 
 Admin dashboard preview:
 
-![Dashboard preview](/images/dashboard.svg)
+![Dashboard1 preview](/images/dashboard1.png)
+![Dashboard2 preview](/images/dashboard2.png)
 
 ## Features
 
@@ -83,7 +84,7 @@ If you deploy on Vercel, set the environment variables in the Vercel project set
 ## Admin demo credentials (replace or remove in public repos)
 
 - Email: admin@example.com
-- Password: changeme
+- Password: 123456
 
 ## Contributing
 
@@ -103,7 +104,7 @@ Contributions are welcome. To contribute:
 
 ## Updating screenshots
 
-The placeholder SVGs are at `public/images/landing.svg` and `public/images/dashboard.svg`. Replace them with high-fidelity PNG/SVG exports from your design tool to show real screenshots.
+The placeholder SVGs are at `public/images/landing.png` and `public/images/dashboard1.png` and `public/images/dashboard2.png`. Replace them with high-fidelity PNG/SVG exports from your design tool to show real screenshots.
 
 ## License & contact
 
