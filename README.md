@@ -12,12 +12,12 @@ A beautiful Next.js + TypeScript storefront built with Tailwind CSS and shadcn/u
 
 Landing page preview:
 
-![Landing preview](/images/landing.png)
+![Landing preview](public/images/landing.png)
 
 Admin dashboard preview:
 
-![Dashboard1 preview](/images/dashboard1.png)
-![Dashboard2 preview](/images/dashboard2.png)
+![Dashboard1 preview](public/images/dashboard1.png)
+![Dashboard2 preview](public/images/dashboard2.png)
 
 ## Features
 
@@ -104,7 +104,7 @@ Contributions are welcome. To contribute:
 
 ## Updating screenshots
 
-The placeholder SVGs are at `public/images/landing.png` and `public/images/dashboard1.png` and `public/images/dashboard2.png`. Replace them with high-fidelity PNG/SVG exports from your design tool to show real screenshots.
+The placeholder images are at `public/images/landing.png`, `public/images/dashboard1.png`, and `public/images/dashboard2.png`. Replace them with high-fidelity PNG/SVG exports from your design tool to show real screenshots.
 
 ## License & contact
 
