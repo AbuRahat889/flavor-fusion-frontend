@@ -1,79 +1,119 @@
-# Welcome to your Lovable project
+# Flavor Fusion — Frontend
 
-## Project info
+A beautiful Next.js + TypeScript storefront built with Tailwind CSS and shadcn/ui. This repository contains the frontend for the Flavor Fusion project (landing pages, menu, cart, checkout, and an admin area).
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Live demo
 
-## How can I edit this code?
+- **Live URL**: https://flavor-fusion-ashen-five.vercel.app
 
-There are several ways of editing your application.
+> Replace the `REPLACE_WITH_YOUR_LIVE_URL` value above with your deployed site URL.
 
-**Use Lovable**
+## Screenshots
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Landing page preview:
 
-Changes made via Lovable will be committed automatically to this repo.
+![Landing preview](/images/landing.svg)
 
-**Use your preferred IDE**
+Admin dashboard preview:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+![Dashboard preview](/images/dashboard.svg)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Features
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the Next.js development server.
-npm run dev
-```
+- Fast, SEO-friendly Next.js App Router pages
+- Responsive landing, menu and product listing
+- Cart and checkout flow (UI only — connect to API)
+- Admin area for products, categories, and orders
+- Tailwind CSS + shadcn/ui components
 
 ## Tech stack
 
-- **Next.js 15** (App Router) with **TypeScript**
-- **Tailwind CSS** + **shadcn/ui**
-- React Context for cart, menu, orders, and admin state
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
+- Next.js (App Router)
 - TypeScript
-- React
-- shadcn-ui
 - Tailwind CSS
+- shadcn/ui component primitives
+- React Context + Redux Toolkit for state
 
-## How can I deploy this project?
+## Getting started (local)
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Prerequisites:
 
-## Can I connect a custom domain to my Lovable project?
+- Node.js 18+ (recommend using nvm)
+- npm or yarn
 
-Yes, you can!
+Install and run:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```bash
+git clone <YOUR_GIT_URL>
+cd flavor-fusion-frontend
+npm install
+npm run dev
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Open http://localhost:3000 in your browser.
+
+## Environment variables
+
+Create a `.env.local` file at the project root with your values. Example:
+
+```
+NEXT_PUBLIC_API_URL=https://api.example.com
+NEXT_PUBLIC_STRIPE_KEY=pk_test_xxx
+```
+
+Note: The frontend expects an API for products, orders, and auth. If you don't have one yet, point `NEXT_PUBLIC_API_URL` to your backend or a mock server.
+
+## Build & deploy
+
+Build for production:
+
+```bash
+npm run build
+npm run start
+```
+
+Deploy recommendations:
+
+- Vercel: automatic for Next.js projects (recommended)
+- Netlify: supports Next.js builds
+- Docker: build the production image and run behind a reverse proxy
+
+If you deploy on Vercel, set the environment variables in the Vercel project settings and update the Live URL above.
+
+## Admin demo credentials (replace or remove in public repos)
+
+- Email: admin@example.com
+- Password: changeme
+
+## Contributing
+
+Contributions are welcome. To contribute:
+
+1. Fork the repo
+2. Create a feature branch
+3. Add tests/verify locally
+4. Open a Pull Request
+
+## Folder structure (key parts)
+
+- `src/app/` — Next.js app routes and layouts
+- `src/components/` — UI components and shadcn primitives
+- `src/redux/` — Redux toolkit slice and API definitions
+- `public/images/` — Project images and static assets
+
+## Updating screenshots
+
+The placeholder SVGs are at `public/images/landing.svg` and `public/images/dashboard.svg`. Replace them with high-fidelity PNG/SVG exports from your design tool to show real screenshots.
+
+## License & contact
+
+This project is licensed under MIT. For questions, open an issue or contact the maintainer.
+
+---
+
+If you'd like, I can:
+
+- Deploy a demo to Vercel using these sources
+- Replace the SVG placeholders with exported PNG screenshots (if you provide them)
+
+Replace the live URL placeholder and admin credentials before sharing or deploying publicly.
